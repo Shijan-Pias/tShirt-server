@@ -1,4 +1,14 @@
-const fs =require('fs');
-const key = fs.readFileSync('./firebase_admin_key.json','utf8')
-const base64 = Buffer.from(key).toString('base64')
-console.log(base64);
+const fs = require('fs');
+const fileName = 'firebase_admin_key.json'; 
+
+try {
+    if (!fs.existsSync(fileName)) {
+        process.exit(1);
+    }
+    const fileData = fs.readFileSync(fileName);
+    const base64String = fileData.toString('base64');
+    console.log(`FB_service_Key=${base64String}`);
+
+} catch (error) {
+    console.error("Error converting file:", error);
+}

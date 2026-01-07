@@ -7,6 +7,7 @@ const stripe = require("stripe")(process.env.DB_payment_key);
 const admin = require("firebase-admin");
 
 const decodedKey = Buffer.from(process.env.FB_service_Key , 'base64').toString('utf8')
+
 const serviceAccount = JSON.parse(decodedKey);
 
 admin.initializeApp({

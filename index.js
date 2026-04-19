@@ -43,8 +43,10 @@ async function run() {
 
 
     const verifyToken = async (req, res, next) => {
+      console.log("Request Headers:", req.headers);
 
       const authHeader = req.headers.authorization;
+      console.log("AUTH HEADER:", authHeader);
 
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ message: "Unauthorized: No token" });
@@ -59,12 +61,15 @@ async function run() {
       // verified 
       try {
         const decodedToken = await admin.auth().verifyIdToken(idToken);
+        console.log(decodedToken.email)
         req.user = decodedToken;
+        
         next();
       } catch (error) {
         return res.status(403).json({ message: "Forbidden: Invalid token" });
       }
     }
+   
 
     const verifyAdmin = async (req, res, next) => {
       const email = req.user.email;
@@ -96,7 +101,7 @@ async function run() {
       }
     });
 
-    app.get("/users/role/:email",verifyToken,verifyAdmin, async (req, res) => {
+    app.get("/users/role/:email",verifyToken, async (req, res) => {
       try {
         const email = req.params.email;
         const user = await userCollection.findOne({ email });
